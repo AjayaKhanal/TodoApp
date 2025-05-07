@@ -1,7 +1,13 @@
 ﻿@model TodoApp.ViewModel.UserViewModel
 
+@{
+	ViewData["Title"] = "Login";
+	Layout = "_Layout";
+}
+
+<link rel="stylesheet" type="text/css" href="~/css/login.css" />
 <div class="login-container">
-	<form method="post" asp-controller="User" asp-action="Login">
+	<form method="post" asp-controller="User" asp-action="Login" class="login-form animate-slide-in">
 		<h2>Login</h2>
 		<div class="form-group">
 			<label asp-for="Email">Email</label>
@@ -13,10 +19,14 @@
 			<input type="password" asp-for="Password" class="form-control" required />
 			<span asp-validation-for="Password" class="text-danger"></span>
 		</div>
-		<button type="submit" class="btn btn-primary">Login</button>
-		<div class="form-group">
-			<a asp-controller="User" asp-action="Register">Don't have an account? Register here</a>
-		</<div>
-	</form>
+		<button type="submit" class="btn btn-login">Login</button>
+		<div class="form-group lreg">
+			<a asp-controller="User" asp-action="Register">Don't have an account? <span>Register here</span></a>
 		</div>
+	</form>
 </div>
+
+@section Scripts {
+	<script src="~/lib/jquery-validation/dist/jquery.validate.min.js"></script>
+	<script src="~/lib/jquery-validation-unobtrusive/jquery.validate.unobtrusive.min.js"></script>
+}

@@ -1,5 +1,53 @@
-﻿.setting-container{
+﻿.user-image{
+    border: 1px solid black;
+    width: 200px;
+    height: 200px;
+    border-radius:50%;
+}
+
+.setting-container {
     display: flex;
     flex-direction: column;
-    gap: 10px;
+/*    gap: 20px;*/
+    margin: 40px auto;
+    background-color: #f9f9f9;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
+    border: 1px solid #ddd;
+    border-radius: 10px;
+    padding: 20px;
 }
+
+.card {
+    padding: 20px;
+    background-color: #f9f9f9;
+    border:none;
+}
+
+.h2 {
+    font-size: 20px;
+    margin-bottom: 15px;
+    color: #333;
+}
+
+label {
+    display: block;
+    margin-bottom: 8px;
+    font-weight: 500;
+    color: #555;
+}
+
+select {
+    width: 100%;
+    padding: 10px;
+    border: 1px solid #ccc;
+    border-radius: 8px;
+    font-size: 16px;
+    background-color: #fff;
+    transition: border-color 0.3s;
+}
+
+    select:focus {
+        border-color: #4a90e2;
+        outline: none;
+        box-shadow: 0 0 3px rgba(74, 144, 226, 0.5);
+    }

@@ -13,7 +13,7 @@ namespace TodoApp.Models
         public string Password { get; set; }
         [Required]
         public string Email { get; set; }
-        public string? PhoneNumber { get; set; }
+        public int? PhoneNumber { get; set; }
         public bool IsActive { get; set; } = false;
         public bool IsEmailVerified { get; set; } = false;
         public bool IsPhoneVerified { get; set; } = false;

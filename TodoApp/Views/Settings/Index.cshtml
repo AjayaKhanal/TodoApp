@@ -1,42 +1,42 @@
-﻿<div class="setting-container">
+﻿<link rel="stylesheet" type="text/css" href="~/css/setting.css"/>
+
+<div class="user-info">
+	<div class="user-image"></div>
+	<div class="user-name"></div>
+</div>
+
+<div class="setting-container">
 	<div class="theme-card card">
-		<h2>Theme</h2>
+		<h2 class="h2">Theme</h2>
 		<div class="theme-options">
-			<label>
-				<input type="radio" name="theme" value="light" checked />
-				Light
-			</label>
-			<label>
-				<input type="radio" name="theme" value="dark" />
-				Dark
-			</label>
-			<label>
-				<input type="radio" name="theme" value="system" />
-				System
-			</label>
+			<label for="theme-select">Choose Theme </label>
+			<select id="theme-select" name="theme">
+				<option value="system">System</option>
+				<option value="light">Light</option>
+				<option value="dark">Dark</option>
+			</select>
 		</div>
 	</div>
 
 	<div class="language-card card">
-		<h2>Language</h2>
+		<h2 class="h2">Language</h2>
 		<div class="language-options">
-			<label>
-				<input type="radio" name="language" value="en" checked />
-				English
-			</label>
-			<label>
-				<input type="radio" name="language" value="fr" />
-				French
-			</label>
+			<label for="lang-select">Choose Language </label>
+			<select id="lang-select" name="language">
+				<option value="en">English</option>
+				<option value="nep">Nepali</option>
+			</select>
 		</div>
 	</div>
+
 	<div class="notification-card card">
-		<h2>Notifications</h2>
+		<h2 class="h2">Notifications</h2>
 		<div class="notification-options">
-			<label>
-				<input type="checkbox" name="notifications" checked />
-				Enable Notifications
-			</label>
+			<label for="notification-select">Notification</label>
+			<select id="notification-select" name="notification">
+				<option value="enabled">Enable</option>
+				<option value="disabled">Disable</option>
+			</select>
 		</div>
 	</div>
 </div>

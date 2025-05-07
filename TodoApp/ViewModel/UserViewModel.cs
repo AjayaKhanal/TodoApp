@@ -18,7 +18,7 @@ namespace TodoApp.ViewModel
         [DataType(DataType.EmailAddress)]
         public string Email { get; set; }
         [DataType(DataType.PhoneNumber)]
-        public string? PhoneNumber { get; set; }
+        public int? PhoneNumber { get; set; }
         public byte[] ProfilePicture { get; set; }
         [NotMapped]
         public IFormFile Profile { get; set; }
