@@ -1,6 +1,7 @@
 using System.Diagnostics;
 using Microsoft.AspNetCore.Mvc;
 using TodoApp.Models;
+using TodoApp.ViewModel;
 
 namespace TodoApp.Controllers
 {
@@ -16,6 +17,20 @@ namespace TodoApp.Controllers
         public IActionResult Index()
         {
             return View();
+        }
+
+        public IActionResult CreateTodo()
+        {
+            return View();
+        }
+
+        [HttpPost]
+        public async Task<IActionResult> CreateTodo(TodoViewModel todoViewModel)
+        {
+            // Simulate a delay for the sake of the example
+            await Task.Delay(1000);
+            // Redirect to the Index action after creating a todo
+            return RedirectToAction("Index");
         }
 
         public IActionResult Privacy()

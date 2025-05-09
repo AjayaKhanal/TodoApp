@@ -2,7 +2,18 @@
     ViewData["Title"] = "Home Page";
 }
 
-<div class="text-center">
-    <h1 class="display-4">Welcome</h1>
-    <p>Learn about <a href="https://learn.microsoft.com/aspnet/core">building Web apps with ASP.NET Core</a>.</p>
+<link rel="stylesheet" type="text/css" href="~/css/todo.css"/>
+
+<div class="todo-container">
+    @for (int i = 0; i < 10; i++)
+    {
+        <div class="todo-card card">
+            <h4>Title</h4>
+            <div>2 days remaining</div>
+        </div>
+    }
+</div>
+
+<div class="add-new-todo">
+    <a class="new-todo-btn" asp-controller="Home" asp-action="CreateTodo"><span><img src="~/Images/plus.png" /></span></a>
 </div>

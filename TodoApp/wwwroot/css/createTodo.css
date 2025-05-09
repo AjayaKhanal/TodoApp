@@ -1,0 +1,66 @@
+﻿.create-todo-container {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    /*    height: 100vh;*/
+    width: 100%;
+    padding: 20px;
+    
+}
+
+.create-todo-form {
+    display: flex;
+    flex-direction: column;
+/*    align-items: center;*/
+    justify-content: center;
+    border-radius:10px;
+/*    width: 100%;*/
+    background: rgba(255,255,255,0.3);
+    box-shadow: 0px 5px 20px rgba(0,0,0,0.5);
+    padding: 50px;
+}
+    
+.create-todo-form input, textarea, select {
+        width: 100%;
+        padding: 10px;
+        margin-bottom: 10px;
+        border: 1px solid #ccc;
+        border-radius: 4px;
+        outline:none;
+    }
+
+    .create-todo-form .form-group input:focus, textarea:focus, select:focus {
+        border: 2px solid #0033cc;
+    }
+
+    .create-todo-form .form-group input[type="submit"] {
+        background-color: #4CAF50;
+        color: white;
+        padding: 10px 20px;
+        border: none;
+        border-radius: 4px;
+        cursor: pointer;
+    }
+        .create-todo-form .form-group input[type="submit"]:hover {
+            background-color: #45a049;
+        }
+        .create-todo-form .form-group input[type="submit"]:disabled {
+            background-color: #ccc;
+            cursor: not-allowed;
+        }
+    /*.create-todo-form .error-message {
+        color: red;
+        font-size: 14px;
+        margin-top: 10px;
+    }
+    .create-todo-form .success-message {
+        color: green;
+        font-size: 14px;
+        margin-top: 10px;
+    }
+    .create-todo-form .loading-message {
+        color: blue;
+        font-size: 14px;
+        margin-top: 10px;
+    }*/

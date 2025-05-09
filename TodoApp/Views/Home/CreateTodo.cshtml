@@ -1,0 +1,61 @@
+﻿@model TodoApp.ViewModel.TodoViewModel
+
+<link rel="stylesheet" type="text/css" href="~/css/createTodo.css" />
+
+<div class="create-todo-container">
+	<form method="post" asp-controller="Home" asp-action="CreateTodo" class="create-todo-form">
+		<h2>Todo</h2>
+		<div class="form-group">
+			<label asp-for="Title">Title</label>
+			<input type="text" asp-for="Title" id="title" required>
+			<span asp-validation-for="Title" class="text-danger"></span>
+		</div>
+		<div class="form-group">
+			<label asp-for="Description">Description</label>
+			<textarea id="description" asp-for="Description" required></textarea>
+			<span asp-validation-for="Description" class="text-danger"></span>
+		</div>
+		<div class="form-group">
+			<label asp-for="DueDate">Due Date</label>
+			<input type="date" asp-for="DueDate" id="dueDate" required>
+			<span asp-validation-for="DueDate" class="text-danger"></span>
+		</div>
+		<div class="form-group">
+			<label asp-for="Priority" for="priority">Priority</label>
+			<select id="priority" asp-for="Priority" name="priority" required>
+				<option value="Low">Low</option>
+				<option value="Medium">Medium</option>
+				<option value="High">High</option>
+				<option value="Critical">Critical</option>
+			</select>
+			<span asp-validation-for="Priority" class="text-danger"></span>
+		</div>
+		<div class="form-group">
+			<label asp-for="Status">Status</label>
+			<select id="status" asp-for="Status" name="status" required>
+				<option value="Pending">Pending</option>
+				<option value="InProgress">In Progress</option>
+				<option value="Completed">Completed</option>
+			</select>
+			<span asp-validation-for="Status" class="text-danger"></span>
+		</div>
+		<div class="form-group">
+			<button type="submit">Create Todo</button>
+		</div>
+	</form>
+
+</div>
+
+@section Scripts {
+	<script src="~/lib/jquery-validation/dist/jquery.validate.min.js"></script>
+	<script src="~/lib/jquery-validation-unobtrusive/jquery.validate.unobtrusive.min.js"></script>
+}
+
+<script>
+	var today = new Date();
+	var duedate = document.getElementById('dueDate');
+
+	if(duedate<=today){
+		console.log('Due date must be greater than start date');
+	}
+</script>
