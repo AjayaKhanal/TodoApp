@@ -14,13 +14,13 @@ namespace TodoApp.Models
         // Priority levels
         public TodoPriority Priority { get; set; } = TodoPriority.Medium;
 
-        public DateTime CreatedAt { get; set; } = DateTime.UtcNow;
-        public string CreatedBy { get; set; }
-        public DateTime UpdatedAt { get; set; }
-        public string UpdatedBy { get; set; }
-        public DateTime DeletedAt { get; set; }
-        public string DeletedBy { get; set; }
-        public int IsDeleted { get; set; }
+        public DateTime? CreatedAt { get; set; } = DateTime.Now;
+        public string? CreatedBy { get; set; }
+        public DateTime? UpdatedAt { get; set; }
+        public string? UpdatedBy { get; set; }
+        public DateTime? DeletedAt { get; set; }
+        public string? DeletedBy { get; set; }
+        public int? IsDeleted { get; set; }
         public DateTime? CompletedAt { get; set; }
         public DateTime DueDate { get; set; }
     }

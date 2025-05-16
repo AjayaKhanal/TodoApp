@@ -18,7 +18,7 @@
 /*    width: 100%;*/
     background: rgba(255,255,255,0.3);
     box-shadow: 0px 5px 20px rgba(0,0,0,0.5);
-    padding: 50px;
+    padding: 25px 50px;
 }
     
 .create-todo-form input, textarea, select {
@@ -35,11 +35,12 @@
     }
 
     .create-todo-form .form-group input[type="submit"] {
+        margin-top: 15px;
         background-color: #4CAF50;
         color: white;
         padding: 10px 20px;
         border: none;
-        border-radius: 4px;
+        border-radius: 6px;
         cursor: pointer;
     }
         .create-todo-form .form-group input[type="submit"]:hover {

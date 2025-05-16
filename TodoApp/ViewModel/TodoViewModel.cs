@@ -5,7 +5,7 @@ namespace TodoApp.ViewModel
 {
     public class TodoViewModel
     {
-        public string TodoId { get; set; }
+        public string? TodoId { get; set; }
         [Required]
         public string Title { get; set; }
         [Required]
@@ -18,6 +18,7 @@ namespace TodoApp.ViewModel
         [DataType(DataType.Date)]
         [Display(Name = "Due Date")]
         public DateTime DueDate { get; set; }
+        public TimeSpan? RemainingTime { get; set; }
 
         public IEnumerable<ValidationResult> Validate(ValidationContext validationContext)
         {

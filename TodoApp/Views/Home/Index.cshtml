@@ -1,19 +1,146 @@
 ﻿@{
-    ViewData["Title"] = "Home Page";
+	ViewData["Title"] = "Home Page";
 }
+@model IEnumerable<TodoApp.ViewModel.TodoViewModel>
 
-<link rel="stylesheet" type="text/css" href="~/css/todo.css"/>
+<link rel="stylesheet" type="text/css" href="~/css/todo.css" />
+
+<div class="todo-search">
+	<form method="get" action="@Url.Action("Index", "Home")">
+		<input type="text" name="searchInput" placeholder="Search todos..." value="@ViewData["searchInput"]" />
+		<span><img src="~/Images/icon_search16x16.png" /></span>
+	</form>
+	<div class="todo-filter">
+		<div class="filter-status">
+		<label>Status</label>
+		<select name="Status">
+			<option value="Pending">Pending</option>
+			<option value="InProgress">InProgress</option>
+			<option value="Completed">Completed</option>
+		</select>
+		</div>
+		<div class="filter-priority">
+			<label>Priority</label>
+			<select name="Status">
+				<option value="Low">Low</option>
+				<option value="Medium">Medium</option>
+				<option value="High">High</option>
+				<option value="Critical">Critical</option>
+			</select>
+		</div>
+	</div>
+</div>
 
 <div class="todo-container">
-    @for (int i = 0; i < 10; i++)
-    {
-        <div class="todo-card card">
-            <h4>Title</h4>
-            <div>2 days remaining</div>
-        </div>
-    }
+	@if (Model != null)
+	{
+		foreach (var todo in Model)
+		{
+			var remainingId = $"remaining-{todo.TodoId}";
+
+			<div class="card todo-card">
+				<h4>@todo.Title</h4>
+				<div>
+					<p>Status: <span class="status">@todo.Status</span> | Priority: <span class="priority">@todo.Priority</span> </p>
+					<p>
+						<strong>Time left:</strong>
+						<span id="@remainingId"
+							  data-duedate="@todo.DueDate.ToString("o")">Loading...</span>
+					</p>
+				</div>
+			</div>
+		}
+	}
+	else
+	{
+		<div class="todo-card card">
+			<h4>No Todos</h4>
+			<div>Click the button below to add a new todo.</div>
+		</div>
+	}
 </div>
 
 <div class="add-new-todo">
-    <a class="new-todo-btn" asp-controller="Home" asp-action="CreateTodo"><span><img src="~/Images/plus.png" /></span></a>
+	<a class="new-todo-btn" asp-controller="Home" asp-action="CreateTodo"><span><img src="~/Images/plus.png" /></span></a>
 </div>
+
+@section Scripts {
+	<script>
+		$(document).ready(function(){
+			var status = $('.status');
+			var statusText;
+			var priority = $('.priority').text();
+			// console.log(status);
+
+			$('.status').each(function () {
+				statusText = $(this).text().trim(); // Trim to remove any extra spaces
+				
+			if(statusText === "Pending"){
+				$(this).addClass("pendingStatus");
+			}
+			else if (statusText === "InProgress"){
+				$(this).addClass("inprogressStatus");
+			}
+			else if(statusText === "Completed"){
+				$(this).addClass("completedStatus");
+			}else{
+				console.log("Invalid status");
+			}
+			});
+
+			setInterval(updateCountdown, 1000);
+			updateCountdown(); // initial call
+		});
+
+		function updateCountdown() {
+			const elements = document.querySelectorAll('[id^="remaining-"]');
+			const now = new Date();
+			var status = document.querySelectorAll('.completedStatus');
+			// console.log(now);
+
+			elements.forEach(el => {
+				const dueDate = new Date(el.dataset.duedate);
+				dueDate.setHours(23, 59, 59, 999); // Set to end of the due day
+				// console.log(dueDate);
+				const statusEl = el.closest('.todo-card')?.querySelector('.status');
+				const statusText = statusEl?.textContent.trim();
+				// console.log(statusText);
+				// If status is Completed, show 0d 0:0:0 and return
+				if (statusText === "Completed") {
+					el.textContent = '0d 0:0:0';
+					el.style.color = '';
+					el.style.fontWeight = '';
+					return;
+				}
+
+				const diff = dueDate - now;
+
+				if(diff>0){
+					const totalSeconds = Math.floor(diff / 1000);
+					const days = Math.floor(totalSeconds / (3600 * 24));
+					const hours = Math.floor((totalSeconds % (3600 * 24)) / 3600);
+					const minutes = Math.floor((totalSeconds % 3600) / 60);
+					const seconds = totalSeconds % 60;
+
+					el.textContent = `${days}d ${hours}:${minutes}:${seconds}`;
+
+					// Highlight if less than 24 hours
+					if (totalSeconds < 86400) {
+						el.style.color = "red";
+						el.style.fontWeight = "bold";
+					} else {
+						el.style.color = "";
+						el.style.fontWeight = "";
+					}
+				}else{
+					el.textContent = "Expired";
+					el.style.color = "red";
+						el.style.fontWeight = "bold";
+					return;
+				}
+
+				
+			});
+		}
+	</script>
+}
