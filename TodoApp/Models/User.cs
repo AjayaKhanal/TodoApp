@@ -13,6 +13,7 @@ namespace TodoApp.Models
         public string Password { get; set; }
         [Required]
         public string Email { get; set; }
+        public byte[] Salt { get; set; }
         public int? PhoneNumber { get; set; }
         public bool IsActive { get; set; } = false;
         public bool IsEmailVerified { get; set; } = false;
@@ -30,5 +31,6 @@ namespace TodoApp.Models
         public string? PasswordResetToken { get; set; }
         public DateTime? PasswordResetTokenExpiry { get; set; }
         public bool IsNotificationEnabled { get; set; } = false;
+        public string? ProfilePictureMimeType { get; set; }
     }
 }

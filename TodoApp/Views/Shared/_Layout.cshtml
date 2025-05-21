@@ -1,4 +1,9 @@
-﻿<!DOCTYPE html>
+﻿@inject IHttpContextAccessor HttpContextAccessor
+@{
+	var userId = HttpContextAccessor.HttpContext.Session.GetString("UserId");
+}
+
+<!DOCTYPE html>
 <html lang="en">
 <head>
 	<meta charset="utf-8" />
@@ -8,143 +13,90 @@
 	<link rel="stylesheet" href="~/css/site.css" asp-append-version="true" />
 	<link rel="stylesheet" href="~/TodoApp.styles.css" asp-append-version="true" />
 	<script src="https://ajax.microsoft.com/ajax/jquery/jquery-1.10.2.js" type="text/javascript"></script>
-	@* <style> *@
-	@* 	body.light-theme { *@
-	@* 		background-color: #fff; *@
-	@* 		color: #000; *@
-	@* 	} *@
 
-	@* 	body.dark-theme { *@
-	@* 		background-color: #1f1f14; *@
-	@* 		color: #fff; *@
-	@* 	} *@
-	@* </style> *@
-
+	<style>
+		.failed h4 a{
+		/* text-decoration: none; */
+		color: var(--text-color);
+		}
+	</style>
 </head>
 <body>
-	<header>
-		<nav class="navbar navbar-expand-sm navbar-toggleable-sm navbar-light bg-white border-bottom box-shadow mb-3">
-			<div class="container-fluid">
-				<a class="navbar-brand" asp-area="" asp-controller="Home" asp-action="Index">TodoApp</a>
-				<button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target=".navbar-collapse" aria-controls="navbarSupportedContent"
-						aria-expanded="false" aria-label="Toggle navigation">
-					<span class="navbar-toggler-icon"></span>
-				</button>
-				<div class="navbar-collapse collapse d-sm-inline-flex justify-content-between">
-					<ul class="navbar-nav flex-grow-1">
-						<li class="nav-item">
-							<a class="nav-link text-dark" asp-area="" asp-controller="Home" asp-action="Index">Home</a>
-						</li>
-						<li class="nav-item">
-							<a class="nav-link text-dark" asp-area="" asp-controller="Home" asp-action="Privacy">Privacy</a>
-						</li>
-						<li class="nav-item">
-							<a class="nav-link text-dark" asp-area="" asp-controller="Settings" asp-action="Index">Setting</a>
-						</li>
-						<li class="nav-item">
-							<a class="nav-link text-dark" asp-area="" asp-controller="User" asp-action="Login">LogIn</a>
-						</li>
-					</ul>
-				</div>
-			</div>
-		</nav>
-	</header>
-	<div class="container">
-		<main role="main" class="pb-3">
-			@RenderBody()
-		</main>
-	</div>
-
-	<footer class="border-top footer text-muted">
-		<div class="container">
-			&copy; 2025 - TodoApp - <a asp-area="" asp-controller="Home" asp-action="Privacy">Privacy</a>
+	@if (string.IsNullOrEmpty(userId))
+	{
+		<div class="failed text-center mt-5">
+			<h2 style="color: red">Authorization failed</h2>
+			<h4>Please <a asp-controller="User" asp-action="Login">log in</a> to view this content.</h4>
 		</div>
-	</footer>
+	}
+	else
+	{
+		<header>
+			<nav class="navbar navbar-expand-sm navbar-toggleable-sm navbar-light bg-white border-bottom box-shadow mb-3">
+				<div class="container-fluid">
+					<a class="navbar-brand" asp-area="" asp-controller="Home" asp-action="Index">TodoApp</a>
+					<button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target=".navbar-collapse" aria-controls="navbarSupportedContent"
+					aria-expanded="false" aria-label="Toggle navigation">
+						<span class="navbar-toggler-icon"></span>
+					</button>
+					<div class="navbar-collapse collapse d-sm-inline-flex justify-content-between">
+						<ul class="navbar-nav flex-grow-1">
+							<li class="nav-item">
+								<a class="nav-link text-dark" asp-area="" asp-controller="Home" asp-action="Index">Home</a>
+							</li>
+							<li class="nav-item">
+								<a class="nav-link text-dark" asp-area="" asp-controller="Home" asp-action="Privacy">Privacy</a>
+							</li>
+							<li class="nav-item">
+								<a class="nav-link text-dark" asp-area="" asp-controller="Settings" asp-action="Index">Setting</a>
+							</li>
+							@if (!string.IsNullOrEmpty(userId))
+							{
+								<li class="nav-item">
+									<a class="nav-link text-dark" asp-area="" asp-controller="User" asp-action="LogOut">Log Out</a>
+								</li>
+							}
+						</ul>
+					</div>
+				</div>
+			</nav>
+		</header>
+		<div class="container">
+			<main role="main" class="pb-3">
+				@RenderBody()
+			</main>
+
+			@if (TempData["Message"] != null)
+			{
+				@await Html.PartialAsync("./_Message.cshtml")
+				
+			}
+		</div>
+
+		<footer class="border-top footer text-muted">
+			<div class="container">
+				&copy; 2025 - TodoApp - <a asp-area="" asp-controller="Home" asp-action="Privacy">Privacy</a>
+			</div>
+		</footer>
+	}
 	<script src="~/lib/jquery/dist/jquery.min.js"></script>
 	<script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
 	<script src="~/js/site.js" asp-append-version="true"></script>
 	@await RenderSectionAsync("Scripts", required: false)
-	<script>
-		$(document).ready(function(){
-		// Function to set a cookie
-		function setCookie(name, value, days){
-			var expires ="";
-			if(days){
-				var date = new Date();
-				date.setTime(date.getTime() + (days * 24 * 60 * 60 * 1000));
-				expires = "; expires=" + date.toUTCString();
-			}
-			document.cookie = name + "=" + (value || "") + expires + ";path=/";
-			console.log(document.cookie);
-		}
-
-		// Function to get a cookie
-		function getCookie(name){
-			var nameCookie = name + "=";
-			console.log(nameCookie);
-			var ca = document.cookie.split(';');
-			for(var i=0; i<ca.length; i++){
-				var c= ca[i].trim();
-				if(c.indexOf(nameCookie) ===0) 
-				{
-					return c.substring(nameCookie.length);
-				}
-			}
-			return null;
-		}
-
-		function applyTheme(theme) {
-				$('body').removeClass('light dark');
-				$('nav').removeClass('navbar-light bg-white navbar-dark bg-black');
-				$('.nav-link').removeClass('text-dark text-light');
-				// $('.setting-container').removeClass('dark-setting-container light-setting-container');
-				// $('.card').removeClass('dark-card light-card');
-
-				if (theme === 'light') {
-					$('body').addClass('light');
-					$('nav').addClass('navbar-light bg-white');
-					$('.nav-link').addClass('text-dark');
-					// $('.setting-container').addClass('light-setting-container');
-					// $('.card').addClass('light-card');
-				}
-
-				if (theme === 'dark') {
-					$('body').addClass('dark');
-					$('nav').addClass('navbar-dark bg-black');
-					$('.nav-link').addClass('text-light');
-					// $('.setting-container').addClass('dark-setting-container');
-					// $('.card').addClass('dark-card');
-				}
-
-				if(theme === 'system') {
-					// 'system' theme: detect system preference
-					if (window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches) {
-						$('body').addClass('dark');
-						$('nav').addClass('navbar-dark bg-black');
-						$('.nav-link').addClass('text-light');
-					} else {
-						$('body').addClass('light');
-						$('nav').addClass('navbar-light bg-white');
-						$('.nav-link').addClass('text-dark');
+	<script src="~/js/theme.js"></script>
+	@section Scripts {
+		<script>
+			document.addEventListener("DOMContentLoaded", function () {
+				setTimeout(function () {
+					const partialView = document.getElementById("message-box");
+					if (partialView) {
+						partialView.classList.add("fade-out"); // Add fade-out class
+						setTimeout(() => partialView.style.display = "none", 1000); // Hide after fade-out
 					}
-				}
-			}
-
-		const cookieTheme = getCookie("theme") || "system";
-
-		// Sync dropdown only if it's on the page
-		if ($('#theme-select').length) {
-			$('#theme-select').val(cookieTheme); // Sync to cookie
-			$('#theme-select').on('change', function () {
-				const selected = $(this).val();
-				setCookie("theme", selected, 30);
-				applyTheme(selected); //immediately preview change
+				}, 2000);
 			});
-		}
+		</script>
+	}
 
-		applyTheme(cookieTheme);
-		});
-		
-	</script>
 </body>
 </html>

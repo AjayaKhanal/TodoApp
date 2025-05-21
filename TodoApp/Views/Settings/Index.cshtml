@@ -1,9 +1,30 @@
-﻿<link rel="stylesheet" type="text/css" href="~/css/setting.css" />
+﻿@model TodoApp.ViewModel.UserViewModel
+<link rel="stylesheet" type="text/css" href="~/css/setting.css" />
 
-<div class="user-info">
-	<div class="user-image"></div>
-	<div class="user-name"></div>
-</div>
+<form asp-action="UpdateProfilePicture" asp-controller="User" method="post" enctype="multipart/form-data" class="profile-form">
+	<div class="user-info">
+		<div class="user-image">
+			@if (Model.ProfilePicture != null)
+			{
+				var base64 = Convert.ToBase64String(Model.ProfilePicture);
+				var mimeType = Model.ProfilePictureMimeType ?? "image/png";
+				var imgSrc = $"data:{mimeType};base64,{base64}";
+				<img src="@imgSrc" id="profile" alt="User Image" />
+			}
+			else
+			{
+				<img src="~/Images/defaultUser.png" id="profile" alt="Default User Image" />
+			}
+			<div>
+				<input type="file" id="fileInput" name="Profile" accept="image/*" hidden onchange="this.form.submit()" />
+				<button type="button" class="upload-button" onclick="document.getElementById('fileInput').click();">Update Image</button>
+			</div>
+		</div>
+		<div class="user-name">
+			<label>@Model.Username</label>
+		</div>
+	</div>
+</form>
 
 <div class="setting-container">
 	<div class="theme-card card">

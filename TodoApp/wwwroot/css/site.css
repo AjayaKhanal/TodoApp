@@ -51,6 +51,7 @@ body {
     --link-hover: #5a67d8;
     --input-focus-border: #5a67d8;
     --input-focus-shadow: rgba(90, 103, 216, 0.3);
+    --div-shadow: rgba(255,255,255,0.8);
 }
 
 /* Dark Theme Overrides */
@@ -65,6 +66,7 @@ body {
     --link-hover: #a3bffa;
     --input-focus-border: #a3bffa;
     --input-focus-shadow: rgba(163, 191, 250, 0.3);
+    --div-shadow: rgba(0,0,0,0.8);
 }
 
 body.dark select {

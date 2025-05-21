@@ -1,8 +1,51 @@
-﻿body {
+﻿/* Base (Light Theme) */
+.light {
+    --bg-color: #ffffff;
+    --text-color: #333333;
+    --form-bg: #ffffff;
+    --border-color: #cccccc;
+    --btn-bg: #5a67d8;
+    --btn-hover-bg: #434190;
+    --link-color: #444444;
+    --link-hover: #5a67d8;
+    --input-focus-border: #5a67d8;
+    --input-focus-shadow: rgba(90, 103, 216, 0.3);
+}
+
+/* Dark Theme Overrides */
+.dark {
+    --bg-color: #121212;
+    --text-color: #e0e0e0;
+    --form-bg: #1f1f1f;
+    --border-color: #444444;
+    --btn-bg: #4c51bf;
+    --btn-hover-bg: #2a2e85;
+    --link-color: #bbbbbb;
+    --link-hover: #a3bffa;
+    --input-focus-border: #a3bffa;
+    --input-focus-shadow: rgba(163, 191, 250, 0.3);
+}
+
+body {
     background-color: var(--bg-color);
     color: var(--text-color);
     transition: background-color 0.3s ease, color 0.3s ease;
+    justify-content: center;
+    align-items: center;
 }
+
+    body.dark input {
+        background-color: #2c2c2c;
+        color: white;
+    }
+
+        body.dark input:focus {
+            border-color: #4a90e2;
+            background-color: #2c2c2c;
+            color: white;
+            box-shadow: 0 0 3px rgba(74, 144, 226, 0.7);
+        }
+
 
 .login-container {
     display: flex;

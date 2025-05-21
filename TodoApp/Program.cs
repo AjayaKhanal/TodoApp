@@ -15,6 +15,20 @@ builder.Services.AddDbContext<TodoDbContext>(options =>
 builder.Services.AddSingleton<UserViewModel>();
 builder.Services.AddSingleton<TodoViewModel>();
 builder.Services.AddControllersWithViews();
+builder.Services.AddHttpContextAccessor();
+
+//Add session services
+builder.Services.AddDistributedMemoryCache();
+builder.Services.AddSession(options => { 
+    options.IdleTimeout = TimeSpan.FromMinutes(30); // Set session timeout to 30 minutes
+    options.Cookie.HttpOnly = true;
+    options.Cookie.IsEssential = true;
+});
+
+builder.Services.AddAuthentication("sessionAuth").AddCookie("sessionAuth", options =>
+{
+    options.LoginPath = "/Users/Login";
+});
 
 var app = builder.Build();
 
@@ -26,6 +40,8 @@ if (!app.Environment.IsDevelopment())
     app.UseHsts();
 }
 
+app.UseSession(); // Enable session middleware
+
 app.UseHttpsRedirection();
 app.UseStaticFiles();
 
@@ -35,6 +51,6 @@ app.UseAuthorization();
 
 app.MapControllerRoute(
    name: "default",
-   pattern: "{controller=Home}/{action=Index}/{id?}");
+   pattern: "{controller=User}/{action=Login}/{id?}");
 
 app.Run();

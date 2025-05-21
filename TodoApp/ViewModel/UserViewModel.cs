@@ -5,14 +5,15 @@ namespace TodoApp.ViewModel
 {
     public class UserViewModel
     {
-        public string UserId { get; set; }
+        public string? UserId { get; set; }
+        [Required]
         public string Username { get; set; }
         [Required]
         [DataType(DataType.Password)]
         public string Password { get; set; }
         [Required]
         [DataType(DataType.Password)]
-        [Compare("Password", ErrorMessage = "The password and confirmation password do not match.")]
+        [Compare("Password", ErrorMessage = "Password and Confirmation Password do not match.")]
         [Display(Name = "Confirm password")]
         public string ConfirmPassword { get; set; }
         [Required]
@@ -22,8 +23,10 @@ namespace TodoApp.ViewModel
         [Display(Name = "Phone Number")]
         public int? PhoneNumber { get; set; }
         [Display(Name = "Profile Picture")]
-        public byte[] ProfilePicture { get; set; }
+        public byte[]? ProfilePicture { get; set; }
         [NotMapped]
-        public IFormFile Profile { get; set; }
+        public IFormFile? Profile { get; set; }
+        public string? ProfilePictureMimeType { get; set; }
+
     }
 }

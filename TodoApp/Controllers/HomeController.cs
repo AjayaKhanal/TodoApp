@@ -20,7 +20,7 @@ namespace TodoApp.Controllers
             _context = context;
         }
 
-        public async Task<IActionResult> Index(string? searchInput)
+        public async Task<IActionResult> Index(string? searchInput, string? statusInput, string? priorityInput)
         {
             var todos = await _context.Todos.Where(t => t.IsDeleted == 0).ToListAsync();
             var todoViewList = new List<TodoViewModel>();
@@ -30,6 +30,38 @@ namespace TodoApp.Controllers
                 ViewData["searchInput"] = searchInput;
                 todos = todos.Where(t => t.Title.Contains(searchInput, StringComparison.OrdinalIgnoreCase)).ToList();
                 todoViewList = todos.Select(todo => new TodoViewModel {
+                    TodoId = todo.TodoId.ToString(),
+                    Title = todo.Title,
+                    Status = todo.Status,
+                    Priority = todo.Priority,
+                    DueDate = todo.DueDate,
+                    RemainingTime = todo.DueDate - DateTime.Now
+                }).ToList();
+                return View(todoViewList);
+            }
+
+            if (statusInput != null && statusInput!="All")
+            {
+                ViewData["statusInput"] = statusInput;
+                todos = todos.Where(t => t.Status.ToString() == statusInput).ToList();
+                todoViewList = todos.Select(todo => new TodoViewModel
+                {
+                    TodoId = todo.TodoId.ToString(),
+                    Title = todo.Title,
+                    Status = todo.Status,
+                    Priority = todo.Priority,
+                    DueDate = todo.DueDate,
+                    RemainingTime = todo.DueDate - DateTime.Now
+                }).ToList();
+                return View(todoViewList);
+            }
+
+            if (priorityInput != null && priorityInput!="All")
+            {
+                ViewData["priorityInput"] = priorityInput;
+                todos = todos.Where(t => t.Priority.ToString() == priorityInput).ToList();
+                todoViewList = todos.Select(todo => new TodoViewModel
+                {
                     TodoId = todo.TodoId.ToString(),
                     Title = todo.Title,
                     Status = todo.Status,
@@ -66,12 +98,16 @@ namespace TodoApp.Controllers
         {
             if (!ModelState.IsValid)
             {
+                TempData["Message"] = "Invalid Action";
+                TempData["Info"] = "Danger";
                 return RedirectToAction("Index", "Home");
             }
             var todos = await _context.Todos.ToListAsync();
             if (todos.Any(t => t.TodoId == todoViewModel.TodoId))
             {
                 ModelState.AddModelError("Title", "Todo already exists.");
+                TempData["Message"] = "Todo already exists";
+                TempData["Info"] = "Danger";
                 return View(todoViewModel);
             }
             try
@@ -90,6 +126,8 @@ namespace TodoApp.Controllers
 
                 await _context.AddAsync(todo);
                 await _context.SaveChangesAsync();
+                TempData["Message"] = "Todo Saved Successfully";
+                TempData["Info"] = "Success";
             }
             catch (Exception ex)
             {
@@ -106,11 +144,15 @@ namespace TodoApp.Controllers
         {
             if (!ModelState.IsValid)
             {
+                TempData["Message"] = "Invalid Action";
+                TempData["Info"] = "Delete";
                 return View(todoViewModel);
             }
             var todo = await _context.Todos.FindAsync(id);
             if (todo == null)
             {
+                TempData["Message"] = "Todo Not Found";
+                TempData["Info"] = "Danger";
                 return NotFound();
             }
 
@@ -123,6 +165,8 @@ namespace TodoApp.Controllers
                 todo.DueDate = todoViewModel.DueDate;
                 _context.Update(todo);
                 await _context.SaveChangesAsync();
+                TempData["Message"] = "Todo Updated Successfully";
+                TempData["Info"] = "Success";
             }
             catch (Exception ex)
             {
@@ -132,11 +176,39 @@ namespace TodoApp.Controllers
         }
 
         [HttpPost]
-        public async Task<IActionResult> DeleteTodo(int id)
-        {
-            var todo = await _context.Todos.FindAsync(id);
+        public async Task<IActionResult> UpdateStatus(string TodoId, string Status){
+            var todo = await _context.Todos.FindAsync(TodoId);
             if (todo == null)
             {
+                TempData["Message"] = "Todo Not Found";
+                TempData["Info"] = "Danger";
+                return NotFound();
+            }
+
+            try
+            {
+                Enum.TryParse(typeof(TodoStatus), Status, true, out var result);
+                todo.Status = (TodoStatus)result;
+                _context.Update(todo);
+                await _context.SaveChangesAsync();
+                TempData["Message"] = "Todo Updated Successfully";
+                TempData["Info"] = "Success";
+            }
+            catch (Exception ex)
+            {
+                return RedirectToAction("Error", "Home", new { message = ex.Message });
+            }
+            return RedirectToAction("Index");
+        }
+
+        [HttpPost]
+        public async Task<IActionResult> DeleteTodo(string TodoId)
+        {
+            var todo = await _context.Todos.FindAsync(TodoId);
+            if (todo == null)
+            {
+                TempData["Message"] = "Todo Not Fund";
+                TempData["Info"] = "Danger";
                 return NotFound();
             }
 
@@ -144,10 +216,12 @@ namespace TodoApp.Controllers
             {
                 todo.IsDeleted = 1;
                 todo.DeletedAt = DateTime.UtcNow;
-                todo.DeletedBy = User.Identity.Name;
+                todo.DeletedBy = HttpContext.Session.GetString("UserId"); ;
 
                 _context.Todos.Update(todo);
                 await _context.SaveChangesAsync();
+                TempData["Message"] = "Todo Deleted Successfully";
+                TempData["Info"] = "Success";
             }
             catch (Exception ex)
             {
